@@ -2,15 +2,17 @@ var path = require("path")
 var express = require("express")
 
 var app = express()
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 var PORT = process.env.port || 3000;
 
 app.get ("/", function(req,res){
-    res.send(path.join(__dirname,"index.html"));
+    res.sendFile(path.join(__dirname,"public/index.html"));
 })
 
 app.get ("/notes", function(req,res){
-    res.send(path.join(__dirname,"notes.html"));
+    res.sendFile(path.join(__dirname,"public/notes.html"));
 })
 
 app.get("/api/notes", function(req, res){
