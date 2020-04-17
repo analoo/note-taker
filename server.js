@@ -2,7 +2,10 @@ var path = require("path")
 var express = require("express")
 var fs = require("fs")
 
+
 var app = express()
+app.use(express.static("public"))
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -23,28 +26,42 @@ app.get("/api/notes", function(req, res){
         }
         var returnVal = JSON.parse(data)
         res.json(returnVal)
-
     })
 
     
 
 })
 
-app.post("/api/notes/new", function(req, res){
+app.post("/api/notes", function(req, res){
     var newnote = req.body;
-    console.log(newnote);
-    // need to add push location to the right place
-    // place.push(newnote)
-    res.json(newnote)
+    fs.readFile(path.join(__dirname,"db/db.json"), function(err, data){
+        if(err){
+            console.log(err)
+        }
+        var returnVal = JSON.parse(data)
+        returnVal.push(newnote)
+        fs.writeFile(path.join(__dirname,"db/db.json"), JSON.stringify(returnVal), function(err,data){
+            if(err) throw err;
+            res.json(returnVal)
+        });
 
-})
+    });    
+});
 
-app.delete("/api/notes/delete/:id", function(req, res){
-    var note = req.param.id
+app.delete("/api/notes/:id", function(req, res){
+    var note = req.params.id
     console.log(note);
-    // need to add remove function
-    // place.pop(note)
-
+    fs.readFile(path.join(__dirname,"db/db.json"), function(err, data){
+        if(err){
+            console.log(err)
+        }
+        var returnVal = JSON.parse(data)
+        returnVal.splice(note,1)
+        fs.writeFile(path.join(__dirname,"db/db.json"), JSON.stringify(returnVal), function(err,data){
+            if(err) throw err;
+            res.json(returnVal)
+        });
+    });  
 })
 
 

@@ -75,6 +75,9 @@ var handleNoteDelete = function(event) {
     activeNote = {};
   }
 
+  console.log(note)
+  console.log(activeNote)
+
   deleteNote(note.id).then(function() {
     getAndRenderNotes();
     renderActiveNote();
@@ -113,6 +116,7 @@ var renderNoteList = function(notes) {
     var note = notes[i];
 
     var $li = $("<li class='list-group-item'>").data(note);
+    $li.data("id", i);
     var $span = $("<span>").text(note.title);
     var $delBtn = $(
       "<i class='fas fa-trash-alt float-right text-danger delete-note'>"
@@ -123,6 +127,7 @@ var renderNoteList = function(notes) {
   }
 
   $noteList.append(noteListItems);
+  
 };
 
 // Gets notes from the db and renders them to the sidebar
@@ -134,8 +139,9 @@ var getAndRenderNotes = function() {
 
 $saveNoteBtn.on("click", handleNoteSave);
 $noteList.on("click", ".list-group-item", handleNoteView);
-$newNoteBtn.on("click", handleNewNoteView);
 $noteList.on("click", ".delete-note", handleNoteDelete);
+
+$newNoteBtn.on("click", handleNewNoteView);
 $noteTitle.on("keyup", handleRenderSaveBtn);
 $noteText.on("keyup", handleRenderSaveBtn);
 
