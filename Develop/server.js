@@ -1,5 +1,6 @@
 var path = require("path")
 var express = require("express")
+var fs = require("fs")
 
 var app = express()
 app.use(express.urlencoded({ extended: true }));
@@ -16,7 +17,16 @@ app.get ("/notes", function(req,res){
 })
 
 app.get("/api/notes", function(req, res){
-    return res.json("placeholder for notes")
+    fs.readFile(path.join(__dirname,"db/db.json"), function(err, data){
+        if(err){
+            console.log(err)
+        }
+        var returnVal = JSON.parse(data)
+        res.json(returnVal)
+
+    })
+
+    
 
 })
 
