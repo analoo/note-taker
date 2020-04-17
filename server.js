@@ -10,7 +10,7 @@ app.use(express.static("public"))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-var PORT = process.env.port || 3000;
+var PORT = process.env.PORT || 3000;
 
 // sends user to indexhtml at root
 app.get ("/", function(req,res){
